@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1. 何为数据库事务数据库事务有严格的定义，必须同时满足四个特性：原子性（Atomic）、一致性（Consistency）、隔离性（Isolation）和持久性（Durability），简称为ACID。“一荣俱荣，一损俱损”很能体现事务的思想。">
+<meta name="keywords" content="数据库事务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库事务基础">
+<meta property="og:url" content="https://luanjia.github.io/2018/08/24/数据库事务基础/index.html">
+<meta property="og:site_name" content="飞翔的天空">
+<meta property="og:description" content="1. 何为数据库事务数据库事务有严格的定义，必须同时满足四个特性：原子性（Atomic）、一致性（Consistency）、隔离性（Isolation）和持久性（Durability），简称为ACID。“一荣俱荣，一损俱损”很能体现事务的思想。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-09-17T02:03:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据库事务基础">
+<meta name="twitter:description" content="1. 何为数据库事务数据库事务有严格的定义，必须同时满足四个特性：原子性（Atomic）、一致性（Consistency）、隔离性（Isolation）和持久性（Durability），简称为ACID。“一荣俱荣，一损俱损”很能体现事务的思想。">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://luanjia.github.io/2018/08/24/数据库事务基础/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>数据库事务基础 | 飞翔的天空</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?69ef061b3ccab76437510bd2df22705a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞翔的天空</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+      <a>
+        <img class="custom-logo-image" src="/images/favicon.ico" alt="飞翔的天空">
+      </a>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luanjia.github.io/2018/08/24/数据库事务基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Luan Jia">
+      <meta itemprop="description" content="俱怀逸兴壮思飞，欲上青天揽明月   To Be Better!">
+      <meta itemprop="image" content="/images/J20.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞翔的天空">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据库事务基础
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-08-24 21:25:39" itemprop="dateCreated datePublished" datetime="2018-08-24T21:25:39+08:00">2018-08-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-09-17 10:03:02" itemprop="dateModified" datetime="2018-09-17T10:03:02+08:00">2018-09-17</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-何为数据库事务"><a href="#1-何为数据库事务" class="headerlink" title="1. 何为数据库事务"></a>1. 何为数据库事务</h2><p>数据库事务有严格的定义，必须同时满足四个特性：原子性（Atomic）、一致性（Consistency）、隔离性（Isolation）和持久性（Durability），简称为ACID。“一荣俱荣，一损俱损”很能体现事务的思想。</p>
+<a id="more"></a>
+<ul>
+<li style="list-style: none"><input type="checkbox"> 原子性：表示组成一个事务的多个数据库操作是一个不可分割的原子单元，只有所有的操作执行成功，整个事务才能提交。事务中的任何一个数据库操作失败，已经执行的任何操作都必须撤销，让数据库返回初始状态。</li>
+<li style="list-style: none"><input type="checkbox"> 一致性：事务操作成功后，数据库所处的状态和它的业务规则是一致的，即数据不会被破坏。如从A账户转账100元到B账户，不管操作成功与否，A账户和B账户的存款总额是不变的。</li>
+<li style="list-style: none"><input type="checkbox"> 隔离性：在并发数据操作时，不同的事务拥有各自的数据空间，它们的操作不会对对方产生干扰。准确地说，并分要求做到完全无干扰。数据库规定了多种事务隔离级别，不同的隔离级别对应不同的干扰程度，隔离级别越高，数据一致性越好，但并发性越弱。</li>
+<li style="list-style: none"><input type="checkbox"> 持久性：一旦事务提交成功后，事务中所有的数据操作都必须被持久化到数据库中。即使在提交事务后，数据库马上崩溃，在数据库重启时，也必须保证能够通过某种机制恢复数据。</li>
+</ul>
+<p><em>数据库管理系统一般采用充值行日志来保证原子性、一致性和持久性。</em></p>
+<p>与Java程序采用对象锁机制来进行线程同步类似，数据库管理系统采用<strong>数据库锁机制</strong>保证事务的隔离性。</p>
+<h2 id="2-数据并发问题"><a href="#2-数据并发问题" class="headerlink" title="2. 数据并发问题"></a>2. 数据并发问题</h2><p>数据库中的相同数据可能同时被多个事务访问，如果没有采取必要的<em>隔离措施</em>，就会导致各种并发问题，破坏数据的完整性。这些问题可以归为2类，包括3类<strong>数据读问题</strong>（脏读、不可重复读和幻象读）及2类<strong>数据更新问题</strong>（第一类丢失更新和第二类丢失更新）。</p>
+<ol>
+<li><p>脏读（dirty read）</p>
+<p>A事务<strong>读取</strong>B事务<strong>尚未提交</strong>的更改数据，并在这个数据的基础上进行操作。如果恰好B事务回滚，那么A事务读取到的数据是不被承认的。</p>
+</li>
+<li><p>不可重复读（unrepeatable read）</p>
+<p>不可重复读是指A事务读取了B事务已经提交的<strong>更改数据</strong>。假设A在取款事务的过程中，B往该账户转账100元，A两次读取账户的余额不一致。</p>
+<p>| 时间 | 取款事务A                             | 转账事务B                    |<br>| :— | :———————————— | :————————— |<br>| T1   |                                       | 开始事务                     |<br>| T2   | 开始事务                              |                              |<br>| T3   |                                       | 查询账户余额1000元           |<br>| T4   | 查询账户余额1000元                    |                              |<br>| T5   |                                       | 取出100元，把余额修改为900元 |<br>| T6   |                                       | 提交事务                     |<br>| T7   | 查询账户余额为900元（和T4读取不一致） |                              |</p>
+<p> 在同一事务中，T4时间与T7时间点读取的账户余额不一致。</p>
+</li>
+<li><p>幻象读（phantom read）</p>
+<p>A事务读取B事务提交的<strong>新增数据</strong>，这时A事务将出现幻象读的问题。幻象读一般出现在计算统计数据的事务中。例如，假设银行系统在同一个事务中两次统计存款账户的总金额，在两次统计的过程中，刚好新增了一个存款账户，并存储100元，这时，两次统计的总金额将不一致。</p>
+<p>| 时间 | 统计金额事务A                     | 转账事务B                     |<br>| :— | :——————————– | :—————————- |<br>| T1   |                                   | 开始事务                      |<br>| T2   | 开始事务                          |                               |<br>| T3   | 统计总存款为10000元               |                               |<br>| T4   |                                   | 新增一个存款账户，存款为100元 |<br>| T5   |                                   | 提交事务                      |<br>| T6   | 再次统计总存款为10100元（幻象读） |                               |</p>
+<p><em>幻象读与不可重复读</em>是两个容易混淆的概念，幻象读是指堵到了其他已经提交事务的<strong>新增数据</strong>，不可重复读是指读到了已经提交事务的<strong>更改数据（更改或删除）</strong>。两者采取的对策是不不同的：防止读到<em>更改数据</em>，只需对操作的数据添加<strong>行级锁</strong>，阻止操作中的数据发生变化；而防止读取到<em>新增数据</em>，则往往需要添加<strong>表级锁</strong>，防止新增数据。</p>
+</li>
+<li><p>第一类丢失更新</p>
+<p>A事务撤销时，把<strong>已经提交的B事务的更新数据覆盖</strong>了。</p>
+<p>| 时间 | 取款事务A                    | 转账事务B                 |<br>| :— | :————————— | :———————— |<br>| T1   | 开始事务                     |                           |<br>| T2   |                              | 开始事务                  |<br>| T3   | 查询账户余额为1000元         |                           |<br>| T4   |                              | 查询账户余额为1000元      |<br>| T5   |                              | 汇入100元，余额改为1100元 |<br>| T6   |                              | 提交事务                  |<br>| T7   | 取出100元，把余额改为900元   |                           |<br>| T8   | 撤销事务                     |                           |<br>| T9   | 余额恢复为1000元（丢失更新） |                           |</p>
+<p>事务A在撤销时，“不小心”将B事务已经转入账户的金额抹去了。</p>
+</li>
+<li><p>第二类丢失更新</p>
+<p>A事务覆盖B事务已经提交的数据，造成B事务所做的操作丢失。</p>
+</li>
+</ol>
+<h2 id="3-数据库锁机制"><a href="#3-数据库锁机制" class="headerlink" title="3. 数据库锁机制"></a>3. 数据库锁机制</h2><p>数据库通过<strong>锁机制</strong>解决并发的问题。</p>
+<blockquote>
+<p>按<strong>锁定对象</strong>的不同，一般可以分为<strong>表锁定</strong>和<strong>行锁定</strong>。</p>
+<p>从<strong>并发事务锁定的关系</strong>上看，可以分为<strong>共享锁定</strong>和<strong>独占锁定</strong>：共享锁定回防止独占锁定，但允许其他的共享锁定。而独占锁定既防止其他的独占锁定，也防止其他的共享锁定。</p>
+</blockquote>
+<ul>
+<li style="list-style: none"><input type="checkbox"> 行共享锁定</li>
+<li style="list-style: none"><input type="checkbox"> 行独占锁定</li>
+<li style="list-style: none"><input type="checkbox"> 表共享锁定</li>
+<li style="list-style: none"><input type="checkbox"> 表共享行独占锁定</li>
+<li style="list-style: none"><input type="checkbox"> 表独占锁定</li>
+</ul>
+<h2 id="4-事务隔离级别"><a href="#4-事务隔离级别" class="headerlink" title="4. 事务隔离级别"></a>4. 事务隔离级别</h2><p>ANSI/ISO SQL 92标准定义了4个不同等级的事务隔离级别，在相同的数据环境下，使用相同的输入，执行相同的工作，根据不同的隔离级别，可能导致不同的结果。不同的事务隔离级别能够解决的数据并发问题的能力是不同的。</p>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻象读</th>
+<th>第一类丢失更新</th>
+<th>第二类丢失更新</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>READ UNCOMMITED</td>
+<td>允许</td>
+<td>允许</td>
+<td>允许</td>
+<td>不允许</td>
+<td>允许</td>
+</tr>
+<tr>
+<td>READ COMMITTED</td>
+<td>不允许</td>
+<td>允许</td>
+<td>允许</td>
+<td>不允许</td>
+<td>允许</td>
+</tr>
+<tr>
+<td>REPEATABLE READ</td>
+<td>不允许</td>
+<td>不允许</td>
+<td>允许</td>
+<td>不允许</td>
+<td>不允许</td>
+</tr>
+<tr>
+<td>SERIALIZABLE</td>
+<td>不允许</td>
+<td>不允许</td>
+<td>不允许</td>
+<td>不允许</td>
+<td>不允许</td>
+</tr>
+</tbody>
+</table>
+<p>事务的<strong>隔离级别</strong>与数据库<strong>并发性</strong>是<strong>对立的</strong>。一般来说，使用READ UNCOMMITED隔离级别的数据库拥有最高的并发性和吞吐量，而使用SERIALIZABLE隔离级别的数据库并发性最低。</p>
+<h2 id="5-Jdbc对事务的支持"><a href="#5-Jdbc对事务的支持" class="headerlink" title="5. Jdbc对事务的支持"></a>5. Jdbc对事务的支持</h2><p>Connectin默认情况下是自动提交的，即每条执行的SQL语句都对应一个事务。为了将多条SQL语句当成一个事务执行，必须通过Connection#setAutoCommit(false)阻止Connecton自动提交。通过Connection#commit()提交事务，通过Connection#rollback()回滚事务。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Connecton conn;</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    conn = DriverManger.getConnection();	<span class="comment">//获取数据连接</span></span><br><span class="line">    conn.setAutoCommit(<span class="keyword">false</span>);				<span class="comment">//关闭自动提交</span></span><br><span class="line">    conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);	<span class="comment">//设置事务隔离级别</span></span><br><span class="line">    Statement  stmt = conn.createStatement();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> rows = stmt.executeUpdate(<span class="string">"INSERT INTO t_topic VALUES(1,'tom') "</span>);</span><br><span class="line">    rows = stmt.executeUpdate(<span class="string">"UPDATE t_user set topic_nums = topic_nums+1 where user_id=1"</span>);</span><br><span class="line">    </span><br><span class="line">    conn.commit();		<span class="comment">//提交事务</span></span><br><span class="line">&#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">    ...;</span><br><span class="line">    conn.rollback();	<span class="comment">//回滚事务      </span></span><br><span class="line">&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">    ...;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库事务/" rel="tag"># 数据库事务</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/04/书到用时方恨少/" rel="next" title="书到用时方恨少">
+                <i class="fa fa-chevron-left"></i> 书到用时方恨少
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/26/SpringMVC中使用Mybatis/" rel="prev" title="SpringMVC中使用Mybatis">
+                SpringMVC中使用Mybatis <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/J20.jpg" alt="Luan Jia">
+            
+              <p class="site-author-name" itemprop="name">Luan Jia</p>
+              <div class="site-description motion-element" itemprop="description">俱怀逸兴壮思飞，欲上青天揽明月   To Be Better!</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-何为数据库事务"><span class="nav-number">1.</span> <span class="nav-text">1. 何为数据库事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-数据并发问题"><span class="nav-number">2.</span> <span class="nav-text">2. 数据并发问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-数据库锁机制"><span class="nav-number">3.</span> <span class="nav-text">3. 数据库锁机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-事务隔离级别"><span class="nav-number">4.</span> <span class="nav-text">4. 事务隔离级别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Jdbc对事务的支持"><span class="nav-number">5.</span> <span class="nav-text">5. Jdbc对事务的支持</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Luan Jia</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

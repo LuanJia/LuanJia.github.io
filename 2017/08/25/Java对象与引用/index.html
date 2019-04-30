@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="一直以来搞不清楚java对象的引用是怎么回事，今天找到一篇介绍非常详细的文章，搬运过来并且整理一下。 原文链接 对象与引用我们先定义一个类：1234class Vehicle&amp;#123;    int passengers;    int fuelcap;&amp;#125; 然后创建一个该类的对象：1Vehicle vehicle1 = new Vehicle(); 在该语句中，总共包含了四个动作。">
+<meta name="keywords" content="java,对象引用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java对象与引用">
+<meta property="og:url" content="https://luanjia.github.io/2017/08/25/Java对象与引用/index.html">
+<meta property="og:site_name" content="飞翔的天空">
+<meta property="og:description" content="一直以来搞不清楚java对象的引用是怎么回事，今天找到一篇介绍非常详细的文章，搬运过来并且整理一下。 原文链接 对象与引用我们先定义一个类：1234class Vehicle&amp;#123;    int passengers;    int fuelcap;&amp;#125; 然后创建一个该类的对象：1Vehicle vehicle1 = new Vehicle(); 在该语句中，总共包含了四个动作。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-25T10:24:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java对象与引用">
+<meta name="twitter:description" content="一直以来搞不清楚java对象的引用是怎么回事，今天找到一篇介绍非常详细的文章，搬运过来并且整理一下。 原文链接 对象与引用我们先定义一个类：1234class Vehicle&amp;#123;    int passengers;    int fuelcap;&amp;#125; 然后创建一个该类的对象：1Vehicle vehicle1 = new Vehicle(); 在该语句中，总共包含了四个动作。">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://luanjia.github.io/2017/08/25/Java对象与引用/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java对象与引用 | 飞翔的天空</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?69ef061b3ccab76437510bd2df22705a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞翔的天空</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+      <a>
+        <img class="custom-logo-image" src="/images/favicon.ico" alt="飞翔的天空">
+      </a>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luanjia.github.io/2017/08/25/Java对象与引用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Luan Jia">
+      <meta itemprop="description" content="俱怀逸兴壮思飞，欲上青天揽明月   To Be Better!">
+      <meta itemprop="image" content="/images/J20.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞翔的天空">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java对象与引用
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-08-25 14:54:23 / Modified: 18:24:01" itemprop="dateCreated datePublished" datetime="2017-08-25T14:54:23+08:00">2017-08-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一直以来搞不清楚java对象的引用是怎么回事，今天找到一篇介绍非常详细的文章，搬运过来并且整理一下。</p>
+<p><a href="http://blog.sina.com.cn/s/blog_4cd5d2bb0100ve9r.html" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="对象与引用"><a href="#对象与引用" class="headerlink" title="对象与引用"></a>对象与引用</h2><p>我们先定义一个类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vehicle</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> passengers;</span><br><span class="line">    <span class="keyword">int</span> fuelcap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后创建一个该类的对象：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Vehicle vehicle1 = <span class="keyword">new</span> Vehicle();</span><br></pre></td></tr></table></figure></p>
+<p>在该语句中，总共包含了四个动作。<br><a id="more"></a></p>
+<ul>
+<li>右边的”new Vehicle”，是以Vehicle类为模板，在<strong>堆空间</strong>里创建了一个Vehicle类对象。</li>
+<li>末尾的”()”表示，在Vehicle对象创建后立即调用Vehicle类的构造函数，对刚生成的对象进行初始化（如果没有自定义构造函数，则调用默认构造函数）。</li>
+<li>左边的”Vehicle vehicle1”创建了一个Vehicle类<strong>引用变量</strong>。所谓Vehicle类引用，就是<em>以后可以用来指向Vehicle对象的对象引用。</em></li>
+<li>“=”操作符使对象引用指向刚刚创建的那个Vehicle对象。</li>
+</ul>
+<p>我们可以把这条语句拆成两部分：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">    Vehicle vehicle1;</span><br><span class="line">    vehicle1 = <span class="keyword">new</span> Vehicle();</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">效果是一样的。有两个实体：一个是**对象引用变量**， 另一个是**对象本身**。</span><br><span class="line"></span><br><span class="line">语句<span class="string">"new Vehicle()"</span>创建的对象没有名字，无法直接访问。我们只能通过对象引用来间接访问对象。</span><br><span class="line"></span><br><span class="line">再来一句：</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">    Vehicle vehicle2;</span><br><span class="line">    vehicle2 = vehicle1;</span><br></pre></td></tr></table></figure>
+<p>这里发生了复制行为，但是<strong>对象本身没有被复制</strong>，被复制的只是对象的引用，其结果是vehicle2引用也指向了vehicle1所指向的对象，即二者指向同一对象。</p>
+<p>如果再用下面语句创建一个对象：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vehicle2 = <span class="keyword">new</span> Vehicle();</span><br></pre></td></tr></table></figure></p>
+<p>则引用变量vehicle2改为指向第二个对象。</p>
+<p>所以：</p>
+<blockquote>
+<p>一个对象引用可以指向0个(null)或1个对象。</p>
+</blockquote>
+<blockquote>
+<p>一个对象可以有N个引用指向它</p>
+</blockquote>
+<p>如果再来一句：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vehicle1 = vehicle2;</span><br></pre></td></tr></table></figure></p>
+<p>则vehicle1也指向了第二个对象，第一个对象由于没有对象引用指向它，就会<strong>成为垃圾回收机制的处理对象</strong>。至于什么时候被回收，则根据不同的垃圾回收机制有所不同。</p>
+<p>没有引用对象指向的对象，例如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Vehicle();</span><br></pre></td></tr></table></figure></p>
+<p>也是合法，并且可用的。<br>例如在打印一个字符串时：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">"Hello World!"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>字符串对象”Hello World!”打印后即被丢弃，可以称为临时对象。</p>
+<p>从存储空间上来说，对象和引用也是独立的，他们存储在不同的地方。<strong>对象一般存储在堆中，而引用存储在速度更快的堆栈中</strong>。</p>
+<h2 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h2><blockquote>
+<p><strong>Java只有一种参数传递方式，那就是值传递</strong><br>即Java中传递任何东西都是传值。如果传入方法的是基本类型的东西，就得到此基本类型的一份拷贝。如果是传递引用，就得到引用的拷贝。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObjectRef</span></span>&#123;</span><br><span class="line">    <span class="comment">//基本类型的参数传递</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testBasicType</span><span class="params">(<span class="keyword">int</span> m)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"m="</span> + m);</span><br><span class="line">        m = <span class="number">100</span>;</span><br><span class="line">        System.out.println(<span class="string">"m="</span> + m);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//参数为对象，不改变引用的值？？？</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(StringBuffer s)</span></span>&#123;</span><br><span class="line">        s.append(<span class="string">"_add"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//参数为对象，改变引用的值？？？</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">changeRef</span><span class="params">(StringBuffer s)</span></span>&#123;</span><br><span class="line">        s = <span class="keyword">new</span> StringBuffer(<span class="string">"java"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">50</span>;</span><br><span class="line">        testBasicType(i);</span><br><span class="line">        System.out.println(i); <span class="comment">//i=50</span></span><br><span class="line">        </span><br><span class="line">        StringBuffer sMain = <span class="keyword">new</span> StringBuffer(<span class="string">"init"</span>);</span><br><span class="line">        System.out.println(<span class="string">"SMain="</span> + sMain.toString());    <span class="comment">//sMain=init</span></span><br><span class="line"></span><br><span class="line">        add(sMain);</span><br><span class="line">        System.out.println(<span class="string">"sMain="</span> + sMain.toString());    <span class="comment">//sMain=init_add</span></span><br><span class="line">        </span><br><span class="line">        changeRef(sMain);</span><br><span class="line">        System.out.println(<span class="string">"sMain="</span> + sMain.toString());    <span class="comment">//sMain=init_add</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>add方法的参数是一个对象，当把sMain传给参数s时，s得到的是sMain的拷贝，所以s和sMain指向的是同一个对象。因此，对s操作影响的也就是sMain指向的对象，故调用add方法后，sMain指向的对象的内容发生了变化。</p>
+<p>在changeRef方法中，参数也是对象，当把sMain传递给s时，s得到一份sMain的<strong>拷贝</strong>，但与add方法不同的是，changeRef在方法体内<strong>改变了s的指向的对象</strong>，也就是说，s与sMain已经指向不同的两个对象，所以<strong>s重新赋值后，s与sMain已经毫无关联</strong>。最终输出的sMain内容并未发生改变。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/对象引用/" rel="tag"># 对象引用</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/25/《Java并发编程实战》/" rel="next" title="开始《Java并发编程实战》">
+                <i class="fa fa-chevron-left"></i> 开始《Java并发编程实战》
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/26/阶段总结-变量命名一定要规范/" rel="prev" title="阶段总结-变量命名一定要规范">
+                阶段总结-变量命名一定要规范 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/J20.jpg" alt="Luan Jia">
+            
+              <p class="site-author-name" itemprop="name">Luan Jia</p>
+              <div class="site-description motion-element" itemprop="description">俱怀逸兴壮思飞，欲上青天揽明月   To Be Better!</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象与引用"><span class="nav-number">1.</span> <span class="nav-text">对象与引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数传递"><span class="nav-number">2.</span> <span class="nav-text">参数传递</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Luan Jia</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

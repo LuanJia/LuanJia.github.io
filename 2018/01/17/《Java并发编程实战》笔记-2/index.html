@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Chapter 3要编写正确的并发程序，关键在于：在访问共享的可变状态时需要进行正确的管理。本章介绍如何共享和发布对象，从而使它们能够安全的有多个线程同时访问。 1. 可见性为了确保多个线程之间对内存写入操作的可见性，必须使用同步机制。程序清单1.1： 在没有同步的情况下共享变量（不可取）123456789101112131415161718public class NoVisibility&amp;#1">
+<meta name="keywords" content="Java,并发编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Java并发编程实战》笔记-2">
+<meta property="og:url" content="https://luanjia.github.io/2018/01/17/《Java并发编程实战》笔记-2/index.html">
+<meta property="og:site_name" content="飞翔的天空">
+<meta property="og:description" content="Chapter 3要编写正确的并发程序，关键在于：在访问共享的可变状态时需要进行正确的管理。本章介绍如何共享和发布对象，从而使它们能够安全的有多个线程同时访问。 1. 可见性为了确保多个线程之间对内存写入操作的可见性，必须使用同步机制。程序清单1.1： 在没有同步的情况下共享变量（不可取）123456789101112131415161718public class NoVisibility&amp;#1">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-17T06:56:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Java并发编程实战》笔记-2">
+<meta name="twitter:description" content="Chapter 3要编写正确的并发程序，关键在于：在访问共享的可变状态时需要进行正确的管理。本章介绍如何共享和发布对象，从而使它们能够安全的有多个线程同时访问。 1. 可见性为了确保多个线程之间对内存写入操作的可见性，必须使用同步机制。程序清单1.1： 在没有同步的情况下共享变量（不可取）123456789101112131415161718public class NoVisibility&amp;#1">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://luanjia.github.io/2018/01/17/《Java并发编程实战》笔记-2/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>《Java并发编程实战》笔记-2 | 飞翔的天空</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?69ef061b3ccab76437510bd2df22705a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞翔的天空</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+      <a>
+        <img class="custom-logo-image" src="/images/favicon.ico" alt="飞翔的天空">
+      </a>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luanjia.github.io/2018/01/17/《Java并发编程实战》笔记-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Luan Jia">
+      <meta itemprop="description" content="俱怀逸兴壮思飞，欲上青天揽明月   To Be Better!">
+      <meta itemprop="image" content="/images/J20.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞翔的天空">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《Java并发编程实战》笔记-2
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-01-17 14:48:22 / Modified: 14:56:02" itemprop="dateCreated datePublished" datetime="2018-01-17T14:48:22+08:00">2018-01-17</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Chapter-3"><a href="#Chapter-3" class="headerlink" title="Chapter 3"></a>Chapter 3</h1><p><strong>要编写正确的并发程序，关键在于：在访问共享的可变状态时需要进行正确的管理。</strong><br><strong>本章介绍如何共享和发布对象，从而使它们能够安全的有多个线程同时访问。</strong></p>
+<h2 id="1-可见性"><a href="#1-可见性" class="headerlink" title="1. 可见性"></a>1. 可见性</h2><p>为了确保多个线程之间对内存写入操作的可见性，必须使用同步机制。<br>程序清单1.1： 在没有同步的情况下共享变量（不可取）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NoVisibility</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> ready;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> number;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ReaderThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">while</span>(!ready)</span><br><span class="line">                Thread.yield();</span><br><span class="line">            System.out.println(number);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">new</span> ReaderThread().start();</span><br><span class="line">        number=<span class="number">42</span>;</span><br><span class="line">        ready=<span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>可能出现的情况：NoVisibility可能会持续循环下去，因为读线程可能永远都看不到ready的值。一种更奇怪的现象是，NoVisibility可能会输出0，因为读线程可能看到了写入ready的值，但却没有看到之后写入number的值，这种现象称为<strong>重排序(Reordering)</strong>。</p>
+<blockquote>
+<p>在没有同步的情况下，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整。在缺乏足够同步的多线程程序中，要想对内存操作的执行顺序进行判断，几乎无法得出正确的结论。</p>
+</blockquote>
+<h3 id="1-1-非原子的64位操作"><a href="#1-1-非原子的64位操作" class="headerlink" title="1.1 非原子的64位操作"></a>1.1 非原子的64位操作</h3><p><strong>最低安全性(out-of-thin-airsafety)：</strong>当线程在没有同步的情况下，可能会得到一个失效值，但至少这个值是由之前某个线程设置的值，而不是一个随机值。这种安全性保证被称为最低安全性。</p>
+<p>最低安全性适用于绝大多数变量，但不适用于<strong>非volatile类型的64位数值变量(double和long)</strong>。因为对于非volatile类型的long和double变量，JVM允许将64位的读操作或写操作分解为两个32位的操作。当读取一个非volatile类型的long变量时，如果对该变量的读操作和写操作在不同的线程中执行，那么很有可能会读到某个值的高32位和另一个值的低32位。</p>
+<blockquote>
+<p>加锁的含义不仅仅局限于互斥行为，还包括内存可见性。为了确保所有线程都能看到共享变量的最新值，所有执行读操作或写操作的线程都必须在一个锁上同步。</p>
+</blockquote>
+<h3 id="1-2-Volatile变量"><a href="#1-2-Volatile变量" class="headerlink" title="1.2 Volatile变量"></a>1.2 Volatile变量</h3><p>Java语言提供了一种稍弱的同步机制，即volatile变量， 用来确保将变量的更新操作通知到其他线程。编译器不会对volatile变量上的操作与其他内存操作一起重排序。volatile变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此<strong>在读取volatile类型的变量时总会返回最新写入的值</strong>。</p>
+<p>程序清单 3-4 数绵羊<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="keyword">boolean</span> asleep;</span><br><span class="line">...</span><br><span class="line">    <span class="keyword">while</span>(!asleep)</span><br><span class="line">        countSomeSheep();</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>加锁机制既可以确保可见性又可以确保原子性，而volatile变量只能确保可见性。</p>
+</blockquote>
+<p>当且仅当满足以下所有条件时，才应该使用volatile变量：</p>
+<ul>
+<li><blockquote>
+<p>对变量的写入操作不依赖变量的当前值，才应该使用volatile变量。</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>该变量不会与其他状态变量一起纳入不变性条件中。</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>在访问变量时不需要加锁。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="2-发布与逸出"><a href="#2-发布与逸出" class="headerlink" title="2. 发布与逸出"></a>2. 发布与逸出</h2><p><strong>发布(Publish)</strong> 一个对象的意思是使对象能够在当前作用域之外的代码中使用。<br>发布对象的最简单的方法是将<strong>对象的引用</strong>保存到一个共有的静态变量中,以便任何类和线程都能看见该对象。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Set&lt;Secret&gt; knowSecrete;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initialize</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//initialize方法中实例化一个新的HashSet对象，并将对象的引用保存到KnowSecrets中以发布该对象。</span></span><br><span class="line">    knowSecrete = <span class="keyword">new</span> HashSet&lt;Secret&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>逸出(Escape)</strong> 当某个不应该发布的对象被发布时，称为逸出。</p>
+<blockquote>
+<p>不要再构造过程中使用this引用逸出。</p>
+</blockquote>
+<p>在构造函数中使用this引用逸出的一个常见错误时，在构造函数中启动一个线程。当对象在其构造函数中创建一个线城市，无论是显示创建（通过将它传递给构造函数）还是隐式创建（由于Thread或Runnable是该对象的一个内部类），this引用都会被新创建的线程共享。在对象尚未完全构造之前，新的线程就可以看见它。在构造函数中创建线程并没有错误，但最好不要立即启动它，<strong>而是通过一个start或initialize方法来启动</strong>。</p>
+<h2 id="3-线程封闭"><a href="#3-线程封闭" class="headerlink" title="3. 线程封闭"></a>3. 线程封闭</h2><p>一种避免使用同步的方式就是不共享数据。如果尽在单县城内访问数据，就不需要同步。这种技术被称为线程封闭(Thread Confinement)，它是实现线程安全的最简单的方式之一。</p>
+<p>Swing中大量使用了线程封闭技术。另一种常见应用是JDBC(Java DataBase Connectivity)的Connection对象。JDBC规范并不要求Connection对象必须是线程安全的。由于大多数请求（例如Servlet请求或者EJB调用等）都是由单个线程采用同步的方法来处理，并且Connection对象返回之前，连接池不会在将它分配给其他线程，因此，这种连接管理模式在处理请求时隐含地将Connection对象封闭在线程中。</p>
+<h3 id="3-1-Ad-hoc线程封闭"><a href="#3-1-Ad-hoc线程封闭" class="headerlink" title="3.1 Ad-hoc线程封闭"></a>3.1 Ad-hoc线程封闭</h3><p>Ad-hoc线程封闭是指，维护线程封闭性的职责完全由程序实现来承担。Ad-hoc线程封闭是非常脆弱的，因为没有任何一种语言特性，能够将对象封闭到目标线程上。所以在程序中尽量少用它。</p>
+<h3 id="3-2-栈封闭"><a href="#3-2-栈封闭" class="headerlink" title="3.2 栈封闭"></a>3.2 栈封闭</h3><p>栈封闭是线程封闭的一种特例，在栈封闭中，只能通过局部变量才能访问对象。局部变量的固有属性之一就是<strong>封闭在执行线程中</strong>。他们位于执行线程的栈中，其他线程无法访问这个栈。</p>
+<h3 id="3-3-ThreadLocal类"><a href="#3-3-ThreadLocal类" class="headerlink" title="3.3 ThreadLocal类"></a>3.3 ThreadLocal类</h3><p>维持线程封闭性的一种更规范方法是使用ThreadLocal，这个类能够使线程中的某个值与保存至的对象关联起来。ThreadLocal提供了get与set方法，这些方法为每个使用该变量的线程<strong>都存有一份独立的副本</strong>,因此get总是返回由当前执行线程在调用set时设置的最新值。</p>
+<p>ThreadLocal对象通常用于防止对可变的单实例变量(Singleton)或全局变量进行共享。<br>程序清单 使用ThreadLocal来维持线程的封闭性</p>
+<p>由于JDBC的连接对象不一定是线程安全的，当多线程应用程序在没有协同的情况下使用全局变量时，就不是线程安全的。通常将JDBC的链接保存到ThreadLocal对象中， 每个线程都会拥有属于自己的链接，如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> ThreadLocal&lt;Connection&gt; connectionHolder </span><br><span class="line">    = <span class="keyword">new</span> ThreadLocal&lt;Connection&gt;()&#123;    <span class="comment">//新建ThreadLocal类对象</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Connection <span class="title">initialValue</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">/*当某个线程初次调用ThreadLocal.get方法时，就会调用initiaValue来获取初始值*/</span></span><br><span class="line">            <span class="keyword">return</span> DriverManager.getConnection(DB_URL);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Connection <span class="title">getConnecton</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> connectionHolder.get();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当某个频繁执行的操作需要一个临时对象，例如一个缓冲区，而同时又希望避免在每次执行时都重新分配该临时对象，就可以使用该技术。</p>
+<h1 id="4-不变性"><a href="#4-不变性" class="headerlink" title="4. 不变性"></a>4. 不变性</h1><p>如果某个对象在被创建后其状态就不能被修改，则这个对象就是不可变对象。</p>
+<blockquote>
+<p>不可变对象一定是线程安全的。</p>
+</blockquote>
+<p>因此可以安全的共享合法不这些对象，而无需创建保护性的副本。</p>
+<p>当满足以下条件时，对象才是不可变的：</p>
+<ul>
+<li>对象创建以后其状态就不能修改。</li>
+<li>对象的所有域都是final类型。</li>
+<li>对象时正确创建的（在对象的创建期间，this引用没有逸出）。</li>
+</ul>
+<h1 id="5-安全发布"><a href="#5-安全发布" class="headerlink" title="5. 安全发布"></a>5. 安全发布</h1><p>在某些情况下我们希望在多个线程间共享对象，此时必须确保安全地进行共享。</p>
+<blockquote>
+<p>任何县城都可以在不需要额外同步的情况下安全的访问不可变对象，即使在发布这些对象时没有使用同步。</p>
+</blockquote>
+<h2 id="5-1-安全发布的常用模式"><a href="#5-1-安全发布的常用模式" class="headerlink" title="5.1 安全发布的常用模式"></a>5.1 安全发布的常用模式</h2><p>可变对象必须通过安全的方式来发布，这通常意味着在发布和使用该对象的线程时都必须使用同步。</p>
+<blockquote>
+<p>要安全的发布一个对象，<strong>对象的引用</strong>以及<strong>对象的状态</strong>必须<strong>同时</strong>对其他线程可见。一个正确构造的对象可以通过以下方式来安全的发布：</p>
+<ul>
+<li>在<strong>静态初始化函数</strong>中初始化一个对象引用。</li>
+<li>将对象的引用保存到volatile类型的域或者AtomicReferance对象中。</li>
+<li>将对象的引用保存到某个正确构造对象的final类型域中。</li>
+<li>将对象的引用保存到一个由锁保护的域中。</li>
+</ul>
+</blockquote>
+<p>通常，要发布一个静态构造的对象，最简单和最安全的方式是使用静态的初始化器：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Holder holider = <span class="keyword">new</span> Holider(<span class="number">42</span>);</span><br></pre></td></tr></table></figure></p>
+<h2 id="5-2-可变对象"><a href="#5-2-可变对象" class="headerlink" title="5.2 可变对象"></a>5.2 可变对象</h2><p>对于可变对象，不仅在发布对象时需要使用同步，而且在每次对象访问时同样需要使用同步来确保后续修改操作的可见性。要安全的共享可变对象，这些对象就必须被安全的发布，并且必须是线程安全的或者由某个锁保护起来。</p>
+<blockquote>
+<p>对象的发布需求取决于它的可变性：</p>
+<ul>
+<li>不可变对象可以通过任意机制来发布。</li>
+<li>事实不可变对象必须通过安全的方式来发布。</li>
+<li>可变对象必须通过安全方式来发布，并且必须是线程安全的或者由某个锁保护起来。</li>
+</ul>
+</blockquote>
+<h2 id="5-3"><a href="#5-3" class="headerlink" title="5.3"></a>5.3</h2><blockquote>
+<p>在并发程序中使用和共享对象时，可以使用一些实用的策略，包括：</p>
+<ul>
+<li><strong>线程封闭</strong>。 线程封闭的对象只能由一个线程拥有，对象被封闭在该线程中，并且只能由这个线程修改。</li>
+<li><strong>只读共享</strong>。 在没有额外同步的情况下，共享的制度对象可以由多个线程并发访问，但任何线程都不能修改它。共享的只读对象包括<em>不可变对象</em>和<em>事实不可变对象</em>。</li>
+<li><strong>线程安全共享</strong>。 线程安全的对象在其内部实现同步，因此多个线程可以通过对象的公有接口来进行访问而不需要进一步的同步。</li>
+<li><strong>保护对象</strong>。 被保护的对象只能通过持有特定的锁来访问。保护对象包括封装在其他线程安全对象中的对象，以及已发布的并且由某个特定锁保护的对象。</li>
+</ul>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/并发编程/" rel="tag"># 并发编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/17/《Java并发编程实战》笔记-1/" rel="next" title="《Java并发编程实战》笔记-1">
+                <i class="fa fa-chevron-left"></i> 《Java并发编程实战》笔记-1
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/17/《Java并发编程实战》笔记-3/" rel="prev" title="《Java并发编程实战》笔记-3">
+                《Java并发编程实战》笔记-3 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/J20.jpg" alt="Luan Jia">
+            
+              <p class="site-author-name" itemprop="name">Luan Jia</p>
+              <div class="site-description motion-element" itemprop="description">俱怀逸兴壮思飞，欲上青天揽明月   To Be Better!</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-3"><span class="nav-number">1.</span> <span class="nav-text">Chapter 3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-可见性"><span class="nav-number">1.1.</span> <span class="nav-text">1. 可见性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-非原子的64位操作"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 非原子的64位操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Volatile变量"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 Volatile变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-发布与逸出"><span class="nav-number">1.2.</span> <span class="nav-text">2. 发布与逸出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-线程封闭"><span class="nav-number">1.3.</span> <span class="nav-text">3. 线程封闭</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Ad-hoc线程封闭"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 Ad-hoc线程封闭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-栈封闭"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 栈封闭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-ThreadLocal类"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 ThreadLocal类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-不变性"><span class="nav-number">2.</span> <span class="nav-text">4. 不变性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-安全发布"><span class="nav-number">3.</span> <span class="nav-text">5. 安全发布</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-安全发布的常用模式"><span class="nav-number">3.1.</span> <span class="nav-text">5.1 安全发布的常用模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-可变对象"><span class="nav-number">3.2.</span> <span class="nav-text">5.2 可变对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3"><span class="nav-number">3.3.</span> <span class="nav-text">5.3</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Luan Jia</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
