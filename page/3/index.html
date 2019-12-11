@@ -206,7 +206,7 @@
   </div>
 
   <div class="site-nav-toggle">
-    <button aria-label="Toggle navigation bar">
+    <button aria-label="Navigationsleiste an/ausschalten">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -234,7 +234,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
 
   </li>
         
@@ -251,7 +251,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Schlagwörter</a>
 
   </li>
         
@@ -268,7 +268,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Kategorien</a>
 
   </li>
 
@@ -304,6 +304,159 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luanjia.github.io/2017/08/25/Java对象与引用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Luan Jia">
+      <meta itemprop="description" content="俱怀逸兴壮思飞，欲上青天揽明月   To Be Better!">
+      <meta itemprop="image" content="/images/J20.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞翔的天空">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/08/25/Java对象与引用/" class="post-title-link" itemprop="url">Java对象与引用</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Erstellt: 2017-08-25 14:54:23 / Geändert am: 18:24:01" itemprop="dateCreated datePublished" datetime="2017-08-25T14:54:23+08:00">2017-08-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>一直以来搞不清楚java对象的引用是怎么回事，今天找到一篇介绍非常详细的文章，搬运过来并且整理一下。</p>
+<p><a href="http://blog.sina.com.cn/s/blog_4cd5d2bb0100ve9r.html" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="对象与引用"><a href="#对象与引用" class="headerlink" title="对象与引用"></a>对象与引用</h2><p>我们先定义一个类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vehicle</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> passengers;</span><br><span class="line">    <span class="keyword">int</span> fuelcap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后创建一个该类的对象：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Vehicle vehicle1 = <span class="keyword">new</span> Vehicle();</span><br></pre></td></tr></table></figure></p>
+<p>在该语句中，总共包含了四个动作。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2017/08/25/Java对象与引用/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -358,14 +511,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2017-08-25 12:31:33 / Modified: 13:19:08" itemprop="dateCreated datePublished" datetime="2017-08-25T12:31:33+08:00">2017-08-25</time>
+              <time title="Erstellt: 2017-08-25 12:31:33 / Geändert am: 13:19:08" itemprop="dateCreated datePublished" datetime="2017-08-25T12:31:33+08:00">2017-08-25</time>
             
 
             
@@ -384,14 +537,14 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
 
                 
                 
-                  , 
+                  . 
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/《Java并发编程实战》笔记/" itemprop="url" rel="index"><span itemprop="name">《Java并发编程实战》笔记</span></a></span>
@@ -529,14 +682,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2017-07-20 14:59:39" itemprop="dateCreated datePublished" datetime="2017-07-20T14:59:39+08:00">2017-07-20</time>
+              <time title="Erstellt: 2017-07-20 14:59:39" itemprop="dateCreated datePublished" datetime="2017-07-20T14:59:39+08:00">2017-07-20</time>
             
 
             
@@ -551,9 +704,9 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">Edited on</span>
+                  <span class="post-meta-item-text">Bearbeitet am</span>
                 
-                <time title="Modified: 2019-04-30 20:47:30" itemprop="dateModified" datetime="2019-04-30T20:47:30+08:00">2019-04-30</time>
+                <time title="Geändert am: 2019-04-30 20:47:30" itemprop="dateModified" datetime="2019-04-30T20:47:30+08:00">2019-04-30</time>
               
             
           </span>
@@ -567,14 +720,14 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
 
                 
                 
-                  , 
+                  . 
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/mail/" itemprop="url" rel="index"><span itemprop="name">mail</span></a></span>
@@ -623,7 +776,7 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2017/07/20/使用JavaMail发送邮件/#more" rel="contents">
-                Read more &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -720,14 +873,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2017-07-13 15:52:22" itemprop="dateCreated datePublished" datetime="2017-07-13T15:52:22+08:00">2017-07-13</time>
+              <time title="Erstellt: 2017-07-13 15:52:22" itemprop="dateCreated datePublished" datetime="2017-07-13T15:52:22+08:00">2017-07-13</time>
             
 
             
@@ -742,9 +895,9 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">Edited on</span>
+                  <span class="post-meta-item-text">Bearbeitet am</span>
                 
-                <time title="Modified: 2017-07-14 03:44:18" itemprop="dateModified" datetime="2017-07-14T03:44:18+08:00">2017-07-14</time>
+                <time title="Geändert am: 2019-12-11 22:26:25" itemprop="dateModified" datetime="2019-12-11T22:26:25+08:00">2019-12-11</time>
               
             
           </span>
@@ -758,14 +911,14 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
 
                 
                 
-                  , 
+                  . 
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/mybatis/" itemprop="url" rel="index"><span itemprop="name">mybatis</span></a></span>
@@ -823,7 +976,7 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2017/07/13/初识mybatis/#more" rel="contents">
-                Read more &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -920,14 +1073,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2017-07-11 21:55:27" itemprop="dateCreated datePublished" datetime="2017-07-11T21:55:27+08:00">2017-07-11</time>
+              <time title="Erstellt: 2017-07-11 21:55:27" itemprop="dateCreated datePublished" datetime="2017-07-11T21:55:27+08:00">2017-07-11</time>
             
 
             
@@ -942,9 +1095,9 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">Edited on</span>
+                  <span class="post-meta-item-text">Bearbeitet am</span>
                 
-                <time title="Modified: 2017-07-14 03:44:18" itemprop="dateModified" datetime="2017-07-14T03:44:18+08:00">2017-07-14</time>
+                <time title="Geändert am: 2017-07-14 03:44:18" itemprop="dateModified" datetime="2017-07-14T03:44:18+08:00">2017-07-14</time>
               
             
           </span>
@@ -986,7 +1139,7 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2017/07/11/折腾一天搞Blog/#more" rel="contents">
-                Read more &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -1034,7 +1187,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Vorherige Seite"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
   </nav>
 
 
@@ -1078,8 +1231,8 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">24</span>
-                    <span class="site-state-item-name">posts</span>
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">Artikel</span>
                   </a>
                 </div>
               
@@ -1106,7 +1259,7 @@
                       
                     
                     <span class="site-state-item-count">5</span>
-                    <span class="site-state-item-name">categories</span>
+                    <span class="site-state-item-name">Kategorien</span>
                   </a>
                 </div>
               
@@ -1161,7 +1314,7 @@
                       
                     
                     <span class="site-state-item-count">19</span>
-                    <span class="site-state-item-name">tags</span>
+                    <span class="site-state-item-name">schlagwörter</span>
                   </a>
                 </div>
               
@@ -1214,7 +1367,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
 
 
 
@@ -1222,7 +1375,7 @@
 
 
 
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.0</div>
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.0</div>
 
 
 

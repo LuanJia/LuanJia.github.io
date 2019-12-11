@@ -206,7 +206,7 @@
   </div>
 
   <div class="site-nav-toggle">
-    <button aria-label="Toggle navigation bar">
+    <button aria-label="Navigationsleiste an/ausschalten">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -234,7 +234,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
 
   </li>
         
@@ -251,7 +251,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Schlagwörter</a>
 
   </li>
         
@@ -268,7 +268,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Kategorien</a>
 
   </li>
 
@@ -304,6 +304,173 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luanjia.github.io/2018/07/25/关于Java线程池与Executor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Luan Jia">
+      <meta itemprop="description" content="俱怀逸兴壮思飞，欲上青天揽明月   To Be Better!">
+      <meta itemprop="image" content="/images/J20.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞翔的天空">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/07/25/关于Java线程池与Executor/" class="post-title-link" itemprop="url">关于Java线程池与Executor</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Erstellt: 2018-07-25 22:12:50" itemprop="dateCreated datePublished" datetime="2018-07-25T22:12:50+08:00">2018-07-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Bearbeitet am</span>
+                
+                <time title="Geändert am: 2018-07-26 09:29:38" itemprop="dateModified" datetime="2018-07-26T09:29:38+08:00">2018-07-26</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="1-无限创建线程的不足"><a href="#1-无限创建线程的不足" class="headerlink" title="1. 无限创建线程的不足"></a>1. 无限创建线程的不足</h3><blockquote>
+<ul>
+<li>线程生命周期的开销非常高。</li>
+<li>资源消耗：活跃的线程会消耗系统资源，尤其是内存。大量的空闲进程会给垃圾回收带来压力。</li>
+<li>稳定性：在可创建线程的数量上存在一个限制，包括JVM的启动参数、Thread构造函数中请求的栈大小以及底层操作系统对线程的限制等。</li>
+</ul>
+</blockquote>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2018/07/25/关于Java线程池与Executor/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -358,14 +525,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-06-30 20:18:34 / Modified: 21:46:45" itemprop="dateCreated datePublished" datetime="2018-06-30T20:18:34+08:00">2018-06-30</time>
+              <time title="Erstellt: 2018-06-30 20:18:34 / Geändert am: 21:46:45" itemprop="dateCreated datePublished" datetime="2018-06-30T20:18:34+08:00">2018-06-30</time>
             
 
             
@@ -412,7 +579,7 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2018/06/30/记第一次面试/#more" rel="contents">
-                Read more &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -509,14 +676,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-01-23 21:55:14 / Modified: 22:47:20" itemprop="dateCreated datePublished" datetime="2018-01-23T21:55:14+08:00">2018-01-23</time>
+              <time title="Erstellt: 2018-01-23 21:55:14 / Geändert am: 22:47:20" itemprop="dateCreated datePublished" datetime="2018-01-23T21:55:14+08:00">2018-01-23</time>
             
 
             
@@ -563,7 +730,7 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2018/01/23/SpringMVC处理文件上传/#more" rel="contents">
-                Read more &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -622,7 +789,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luanjia.github.io/2018/01/17/《Java并发编程实战》笔记-4/">
+    <link itemprop="mainEntityOfPage" href="https://luanjia.github.io/2018/01/17/《Java并发编程实战》笔记-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Luan Jia">
@@ -642,7 +809,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/01/17/《Java并发编程实战》笔记-4/" class="post-title-link" itemprop="url">《Java并发编程实战》笔记-4</a>
+                <a href="/2018/01/17/《Java并发编程实战》笔记-2/" class="post-title-link" itemprop="url">《Java并发编程实战》笔记-2</a>
               
             
           </h1>
@@ -660,14 +827,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-01-17 14:48:22 / Modified: 14:56:02" itemprop="dateCreated datePublished" datetime="2018-01-17T14:48:22+08:00">2018-01-17</time>
+              <time title="Erstellt: 2018-01-17 14:48:22 / Geändert am: 14:56:02" itemprop="dateCreated datePublished" datetime="2018-01-17T14:48:22+08:00">2018-01-17</time>
             
 
             
@@ -707,15 +874,13 @@
 
       
         
-          <h1 id="Chapter5"><a href="#Chapter5" class="headerlink" title="Chapter5"></a>Chapter5</h1><h2 id="5-1-同步容器类"><a href="#5-1-同步容器类" class="headerlink" title="5.1 同步容器类"></a>5.1 同步容器类</h2><blockquote>
-<p>同步容器类包括Vector和Hashtable，二者是早期JDK的一部分，，此外还包括在JDK1.2中添加的一些功能类似的类，这些同步的封装器类是有Collections.synchronizedXxx等工厂方法创建的。这些类实现线程安全的方式是：将它们封装起来，并对每个公有方法都进行同步，使得每次只有一个线程能访问容器的状态。</p>
-</blockquote>
-<h3 id="5-1-1同步容器类的问题"><a href="#5-1-1同步容器类的问题" class="headerlink" title="5.1.1同步容器类的问题"></a>5.1.1同步容器类的问题</h3><p>同步容器类都是线程安全的，但在某些情况下可能需要额外的客户端加锁来保护复合操作。容器上常见的复合操作包括：迭代（反复访问元素，直到遍历完全容器中所有元素）、跳转（根据指定顺序找到当前元素的下一个元素）以及条件运算，例如“若没有就添加”（检查在Map中是否存在键值K，如果没有，就加入二元组(K,V)。</p>
+          <h1 id="Chapter-3"><a href="#Chapter-3" class="headerlink" title="Chapter 3"></a>Chapter 3</h1><p><strong>要编写正确的并发程序，关键在于：在访问共享的可变状态时需要进行正确的管理。</strong><br><strong>本章介绍如何共享和发布对象，从而使它们能够安全的有多个线程同时访问。</strong></p>
+<h2 id="1-可见性"><a href="#1-可见性" class="headerlink" title="1. 可见性"></a>1. 可见性</h2><p>为了确保多个线程之间对内存写入操作的可见性，必须使用同步机制。<br>程序清单1.1： 在没有同步的情况下共享变量（不可取）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NoVisibility</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> ready;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> number;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ReaderThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">while</span>(!ready)</span><br><span class="line">                Thread.yield();</span><br><span class="line">            System.out.println(number);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">new</span> ReaderThread().start();</span><br><span class="line">        number=<span class="number">42</span>;</span><br><span class="line">        ready=<span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2018/01/17/《Java并发编程实战》笔记-4/#more" rel="contents">
-                Read more &raquo;
+              <a class="btn" href="/2018/01/17/《Java并发编程实战》笔记-2/#more" rel="contents">
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -812,14 +977,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-01-17 14:48:22 / Modified: 14:56:02" itemprop="dateCreated datePublished" datetime="2018-01-17T14:48:22+08:00">2018-01-17</time>
+              <time title="Erstellt: 2018-01-17 14:48:22 / Geändert am: 14:56:02" itemprop="dateCreated datePublished" datetime="2018-01-17T14:48:22+08:00">2018-01-17</time>
             
 
             
@@ -873,7 +1038,7 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2018/01/17/《Java并发编程实战》笔记-3/#more" rel="contents">
-                Read more &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -932,7 +1097,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luanjia.github.io/2018/01/17/《Java并发编程实战》笔记-2/">
+    <link itemprop="mainEntityOfPage" href="https://luanjia.github.io/2018/01/17/《Java并发编程实战》笔记-4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Luan Jia">
@@ -952,7 +1117,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/01/17/《Java并发编程实战》笔记-2/" class="post-title-link" itemprop="url">《Java并发编程实战》笔记-2</a>
+                <a href="/2018/01/17/《Java并发编程实战》笔记-4/" class="post-title-link" itemprop="url">《Java并发编程实战》笔记-4</a>
               
             
           </h1>
@@ -970,14 +1135,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-01-17 14:48:22 / Modified: 14:56:02" itemprop="dateCreated datePublished" datetime="2018-01-17T14:48:22+08:00">2018-01-17</time>
+              <time title="Erstellt: 2018-01-17 14:48:22 / Geändert am: 14:56:02" itemprop="dateCreated datePublished" datetime="2018-01-17T14:48:22+08:00">2018-01-17</time>
             
 
             
@@ -1017,13 +1182,15 @@
 
       
         
-          <h1 id="Chapter-3"><a href="#Chapter-3" class="headerlink" title="Chapter 3"></a>Chapter 3</h1><p><strong>要编写正确的并发程序，关键在于：在访问共享的可变状态时需要进行正确的管理。</strong><br><strong>本章介绍如何共享和发布对象，从而使它们能够安全的有多个线程同时访问。</strong></p>
-<h2 id="1-可见性"><a href="#1-可见性" class="headerlink" title="1. 可见性"></a>1. 可见性</h2><p>为了确保多个线程之间对内存写入操作的可见性，必须使用同步机制。<br>程序清单1.1： 在没有同步的情况下共享变量（不可取）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NoVisibility</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> ready;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> number;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ReaderThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">while</span>(!ready)</span><br><span class="line">                Thread.yield();</span><br><span class="line">            System.out.println(number);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">new</span> ReaderThread().start();</span><br><span class="line">        number=<span class="number">42</span>;</span><br><span class="line">        ready=<span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+          <h1 id="Chapter5"><a href="#Chapter5" class="headerlink" title="Chapter5"></a>Chapter5</h1><h2 id="5-1-同步容器类"><a href="#5-1-同步容器类" class="headerlink" title="5.1 同步容器类"></a>5.1 同步容器类</h2><blockquote>
+<p>同步容器类包括Vector和Hashtable，二者是早期JDK的一部分，，此外还包括在JDK1.2中添加的一些功能类似的类，这些同步的封装器类是有Collections.synchronizedXxx等工厂方法创建的。这些类实现线程安全的方式是：将它们封装起来，并对每个公有方法都进行同步，使得每次只有一个线程能访问容器的状态。</p>
+</blockquote>
+<h3 id="5-1-1同步容器类的问题"><a href="#5-1-1同步容器类的问题" class="headerlink" title="5.1.1同步容器类的问题"></a>5.1.1同步容器类的问题</h3><p>同步容器类都是线程安全的，但在某些情况下可能需要额外的客户端加锁来保护复合操作。容器上常见的复合操作包括：迭代（反复访问元素，直到遍历完全容器中所有元素）、跳转（根据指定顺序找到当前元素的下一个元素）以及条件运算，例如“若没有就添加”（检查在Map中是否存在键值K，如果没有，就加入二元组(K,V)。</p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2018/01/17/《Java并发编程实战》笔记-2/#more" rel="contents">
-                Read more &raquo;
+              <a class="btn" href="/2018/01/17/《Java并发编程实战》笔记-4/#more" rel="contents">
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -1120,14 +1287,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-01-17 14:43:13 / Modified: 14:56:02" itemprop="dateCreated datePublished" datetime="2018-01-17T14:43:13+08:00">2018-01-17</time>
+              <time title="Erstellt: 2018-01-17 14:43:13 / Geändert am: 14:56:02" itemprop="dateCreated datePublished" datetime="2018-01-17T14:43:13+08:00">2018-01-17</time>
             
 
             
@@ -1180,7 +1347,7 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2018/01/17/《Java并发编程实战》笔记-1/#more" rel="contents">
-                Read more &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -1277,14 +1444,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2017-11-13 20:11:03 / Modified: 21:26:56" itemprop="dateCreated datePublished" datetime="2017-11-13T20:11:03+08:00">2017-11-13</time>
+              <time title="Erstellt: 2017-11-13 20:11:03 / Geändert am: 21:26:56" itemprop="dateCreated datePublished" datetime="2017-11-13T20:11:03+08:00">2017-11-13</time>
             
 
             
@@ -1303,7 +1470,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/杂谈/" itemprop="url" rel="index"><span itemprop="name">杂谈</span></a></span>
@@ -1351,7 +1518,7 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2017/11/13/关于读书/#more" rel="contents">
-                Read more &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -1448,14 +1615,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2017-11-01 22:24:26" itemprop="dateCreated datePublished" datetime="2017-11-01T22:24:26+08:00">2017-11-01</time>
+              <time title="Erstellt: 2017-11-01 22:24:26" itemprop="dateCreated datePublished" datetime="2017-11-01T22:24:26+08:00">2017-11-01</time>
             
 
             
@@ -1470,9 +1637,9 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">Edited on</span>
+                  <span class="post-meta-item-text">Bearbeitet am</span>
                 
-                <time title="Modified: 2019-04-30 20:49:48" itemprop="dateModified" datetime="2019-04-30T20:49:48+08:00">2019-04-30</time>
+                <time title="Geändert am: 2019-04-30 20:49:48" itemprop="dateModified" datetime="2019-04-30T20:49:48+08:00">2019-04-30</time>
               
             
           </span>
@@ -1603,14 +1770,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2017-10-26 22:50:45 / Modified: 23:10:44" itemprop="dateCreated datePublished" datetime="2017-10-26T22:50:45+08:00">2017-10-26</time>
+              <time title="Erstellt: 2017-10-26 22:50:45 / Geändert am: 23:10:44" itemprop="dateCreated datePublished" datetime="2017-10-26T22:50:45+08:00">2017-10-26</time>
             
 
             
@@ -1656,160 +1823,7 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2017/10/26/阶段总结-变量命名一定要规范/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luanjia.github.io/2017/08/25/Java对象与引用/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Luan Jia">
-      <meta itemprop="description" content="俱怀逸兴壮思飞，欲上青天揽明月   To Be Better!">
-      <meta itemprop="image" content="/images/J20.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="飞翔的天空">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/08/25/Java对象与引用/" class="post-title-link" itemprop="url">Java对象与引用</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2017-08-25 14:54:23 / Modified: 18:24:01" itemprop="dateCreated datePublished" datetime="2017-08-25T14:54:23+08:00">2017-08-25</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>一直以来搞不清楚java对象的引用是怎么回事，今天找到一篇介绍非常详细的文章，搬运过来并且整理一下。</p>
-<p><a href="http://blog.sina.com.cn/s/blog_4cd5d2bb0100ve9r.html" target="_blank" rel="noopener">原文链接</a></p>
-<h2 id="对象与引用"><a href="#对象与引用" class="headerlink" title="对象与引用"></a>对象与引用</h2><p>我们先定义一个类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vehicle</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> passengers;</span><br><span class="line">    <span class="keyword">int</span> fuelcap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后创建一个该类的对象：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Vehicle vehicle1 = <span class="keyword">new</span> Vehicle();</span><br></pre></td></tr></table></figure></p>
-<p>在该语句中，总共包含了四个动作。<br>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/08/25/Java对象与引用/#more" rel="contents">
-                Read more &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -1857,7 +1871,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Vorherige Seite"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Nächste Seite"></i></a>
   </nav>
 
 
@@ -1901,8 +1915,8 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">24</span>
-                    <span class="site-state-item-name">posts</span>
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">Artikel</span>
                   </a>
                 </div>
               
@@ -1929,7 +1943,7 @@
                       
                     
                     <span class="site-state-item-count">5</span>
-                    <span class="site-state-item-name">categories</span>
+                    <span class="site-state-item-name">Kategorien</span>
                   </a>
                 </div>
               
@@ -1984,7 +1998,7 @@
                       
                     
                     <span class="site-state-item-count">19</span>
-                    <span class="site-state-item-name">tags</span>
+                    <span class="site-state-item-name">schlagwörter</span>
                   </a>
                 </div>
               
@@ -2037,7 +2051,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
 
 
 
@@ -2045,7 +2059,7 @@
 
 
 
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.0</div>
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.0</div>
 
 
 
